@@ -20,12 +20,12 @@ class UsersSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name'              => 'Pavani',
-            'email'             => 'g.siripavani@gmail.com',
+            'name'              => 'Divya sree',
+            'email'             => 'drama001@odu.edu',
             'password'          =>  Hash::make('password'),
             'remember_token'    =>  Str::random(10),
-           // 'verification_code' =>  Str::random(10),
-            // // 'is_verified'       =>  
+            'verification_code' =>  Str::random(10),
+            // //'is_verified'       =>  
             
         ]);
     }

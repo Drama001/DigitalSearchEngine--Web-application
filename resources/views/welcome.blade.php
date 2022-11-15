@@ -7,6 +7,9 @@
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
     <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
+    <style>
+        
+        </style>
 </head>
 <body class="bg-gradient-to-r from-teal-200 to-lime-200">
   <div class="w-screen h-screen flex justify-center items-center flex-col">
@@ -26,7 +29,6 @@
                 </div>
                 <button type="submit" name="sh" class="p-2.5 ml-2 text-sm font-medium text-white bg-gray-700 rounded-md border border-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300">
                     <p>Search</p>
-                    
                 </button>
             </form>
     </div>  

@@ -64,24 +64,24 @@
                 </div>
                 <button type="submit" name="sh" class="p-2.5 ml-2 text-sm font-medium text-white bg-gray-900 rounded-md border border-gray-500 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
                     <p>Search</p>
-                    
                 </button>
             </form>
     </div>
 </body>
 
 <?php
-    //PAGINATION
-    // $no_of_records_per_page = 8;
+    //----PAGINATION------//
+    $no_of_records_per_page = 10;
 
-    // if (isset($_GET['pageno'])) {
-    //     $pageno = $_GET['pageno'];
-    // } else {
-    //     $pageno = 1;
-    // }
+    if (isset($_GET['pageno'])) {
+        $pageno = $_GET['pageno'];
+    } else {
+        $pageno = 1;
+    }
 
-    // $offset = ($pageno-1) * $no_of_records_per_page; 
-     
+    $offset = ($pageno-1) * $no_of_records_per_page; 
+
+    //----PAGINATION------//
 
     function highlightWords($searchText, $word){
         $highlighted_string = preg_replace('#'. preg_quote($word) .'#i', '<span style="background-color: #F9F902;">\\0</span>', $searchText);
@@ -126,70 +126,65 @@
     
   }
   else{
-    //$score = $response['hits']['hits'][0]['_score'];
     echo
     '<div class="px-4 py-2 text-lg text-white capitalize">
     <p class="font-bold"><i>'.$searchHits.'</i> results found for <i>'.$searchWord.'</i></p>
     </div>';
-    
-    foreach($searchResult as $source){
+
+    for($i = $offset;$i < $pageno * $no_of_records_per_page && $i < $searchHits;$i++){        
+        $source = $searchResult[$i];
         $etd_file_id = (isset($source['_source']['etd_file_id'])? $source['_source']['etd_file_id'] : "");
-       $title= (isset($source['_source']['title'])? highlightWords($source['_source']['title'], $searchWord) : "");
-       $advisor= (isset($source['_source']['advisor'])? highlightWords($source['_source']['advisor'], $searchWord) : "");
-       $author = (isset($source['_source']['author']) ? highlightWords($source['_source']['author'], $searchWord) : "");
-       $year= (isset($source['_source']['year']) ? highlightWords($source['_source']['year'], $searchWord) : "");
-       $degree = (isset($source['_source']['degree']) ? highlightWords($source['_source']['degree'], $searchWord) : ""); 
-       $program = (isset($source['_source']['program']) ? highlightWords($source['_source']['program'], $searchWord) : ""); 
-       $university = (isset($source['_source']['university']) ? highlightWords($source['_source']['university'], $searchWord) : ""); 
-       $wiki_terms = (isset($source['_source']['wiki_terms']) ? highlightWords($source['_source']['wiki_terms'], $searchWord) : ""); 
-       $abstract = (isset($source['_source']['abstract']) ? highlightWords($source['_source']['abstract'], $searchWord) : "");
+        $title= (isset($source['_source']['title'])? highlightWords($source['_source']['title'], $searchWord) : "");
+        $advisor= (isset($source['_source']['advisor'])? highlightWords($source['_source']['advisor'], $searchWord) : "");
+        $author = (isset($source['_source']['author']) ? highlightWords($source['_source']['author'], $searchWord) : "");
+        $year= (isset($source['_source']['year']) ? highlightWords($source['_source']['year'], $searchWord) : "");
+        $degree = (isset($source['_source']['degree']) ? highlightWords($source['_source']['degree'], $searchWord) : ""); 
+        $program = (isset($source['_source']['program']) ? highlightWords($source['_source']['program'], $searchWord) : ""); 
+        $university = (isset($source['_source']['university']) ? highlightWords($source['_source']['university'], $searchWord) : ""); 
+       // $wiki_terms = (isset($source['_source']['wiki_terms']) ? highlightWords($source['_source']['wiki_terms'], $searchWord) : ""); 
+        $abstract = (isset($source['_source']['abstract']) ? highlightWords($source['_source']['abstract'], $searchWord) : "");
+        
        $trimmed_abstract =  mb_strimwidth($abstract, 0, 500, "...");
     
     echo'
-    <div class="py-2 px-5">
-    <a href="/dissertationView/'.$etd_file_id.'" class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100">
-        <p class="capitalize mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">Title:</span>'.$title.'</p>
-        <p class="capitalize mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">Author(s):</span>'.$author.'</p>
-        <p class="capitalize mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">University:</span>'.$university.'</p>
-        <p class="capitalize mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">Year:</span>'.$year.'</p>
-        <p class="font-normal text-gray-900 px-2"><span class="font-bold">Abstract:</span>'.$trimmed_abstract.'</p>
+    <div class=" py-2 px-5">
+    <a href="/dissertationView/'.$etd_file_id.'" class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100">    
+    <p class="mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">Title:</span>'.$title.'</p>
+    <p class="mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">Author(s):</span>'.$author.'</p>
+    <p class="mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">University:</span>'.$university.'</p>
+    <p class="mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">Year:</span>'.$year.'</p>
+    <p class="font-normal text-gray-700 px-2"><span class="font-bold ">Abstract:</span>'.$trimmed_abstract.'</p>
     </a> 
     </div>
     ';
-  }
-//   PAGINATION
-//   $total_pages = ceil($searchHits / $no_of_records_per_page);
-//     echo $total_pages;
+    }
 
-  echo'
-  <div class="flex justify-center mt-3">
-    <nav aria-label="Page navigation example">
-    <ul class="inline-flex -space-x-px">
-    <li>
-        <a href="#" class="py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
-    </li>
-    <li>
-        <a href="#" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-    </li>
-    <li>
-        <a href="#" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-    </li>
-    <li>
-        <a href="#" aria-current="page" class="py-2 px-3 text-blue-600 bg-blue-50 border border-gray-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-    </li>
-    <li>
-        <a href="#" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
-    </li>
-    <li>
-        <a href="#" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
-    </li>
-    <li>
-        <a href="#" class="py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
-    </li>
-    </ul>
-    </nav>
-    </div>
-  ';
+   echo'<br>';
+
+
+   //----PAGINATION-----//
+   $total_pages = ceil($searchHits / $no_of_records_per_page);
+    $n=1;
+    if($pageno>1){
+        echo'<a href="?search='.$searchWord.'&pageno='.($pageno-1).'" class="ml-4 py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">Previous</a>';
+    }
+    if($total_pages>1){
+        for($p=1; $p<$total_pages; $p++){
+            echo'   
+                <a href="?search='.$searchWord.'&pageno='.$n.'" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">'.$n.'</a>';
+            $n++;
+        }
+    }
+    if($pageno < $total_pages){
+        echo'   
+            <a href="?search='.$searchWord.'&pageno='.($pageno+1).'" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">Next</a>';
+    }
+
+    if($pageno == $total_pages){
+        echo'   
+            <a href="?search='.$searchWord.'&pageno='.$total_pages.'" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">Last</a>';
+    }
+    //----PAGINATION-----//
     
 }
 
