@@ -26,14 +26,14 @@ class MainController extends Controller
         return view('/login');
     }
 
+    //---Logout---//
     function logout(){
         $user = Auth::user();
-        // $user->is_verified = 0;
-        // $user->save();
         Auth::logout();
         return redirect('/');
     }
 
+    //---- Recaptcha ---//
     function verification(Request $request){
         $this->validate($request, [
             'email'   => 'required|email',
@@ -82,6 +82,7 @@ class MainController extends Controller
         return view('/register');
     }
  
+    //----- Search Engine after loggin-in ----//
     function searchEngine(Request $request){
         $searchWord = $request->input('search');
         $searchWord = strip_tags(htmlspecialchars_decode($searchWord));
@@ -89,7 +90,7 @@ class MainController extends Controller
             return redirect()->route('home');
         }
         $params = [
-            'index' => 'web518',
+            'index' => 'web1_518',
             'body' => [
                 'query' => [
                     'multi_match' => [
@@ -113,14 +114,15 @@ class MainController extends Controller
         return view('search',["searchString"=>$searchWord])->withquery($params);
     }
 
+    //----- Search Engine before loggin-in ----//
     function viewSearchEngine(Request $request){
         $searchWord = $request->input('search');
         $searchWord = strip_tags(htmlspecialchars_decode($searchWord));
         if($searchWord == '' || Str::length($searchWord) == 0) {
-            return redirect()->route('welcome');
+            return redirect()->route('home');
         }
         $params = [
-            'index' => 'web518',
+            'index' => 'web1_518',
             'body' => [
                 'query' => [
                     'multi_match' => [
@@ -146,9 +148,10 @@ class MainController extends Controller
         return view('viewSearch',["searchString"=>$searchWord])->withquery($params);
     }
 
+    //---- Summary Page ----//
     function openDissertation($id){
         $params = [
-            'index' => 'web518',
+            'index' => 'web1_518',
             'body' => [
                 'query' => [
                     'multi_match' => [
@@ -163,6 +166,7 @@ class MainController extends Controller
         return view('summary', ["id"=>$id])->withquery($params);
     }
 
+    //---- To view PDF ---//
     function openPDF($pdf){
         $filename = "/Users/divyasreeramagiri/Downloads/PDF/$pdf";
   
@@ -180,6 +184,7 @@ class MainController extends Controller
         return view('verificationpage');
     }
 
+    //---- Two factor Authentication ----//
     function verifyuser(Request $request)
     {
         $token = $_GET['verification_code'];
@@ -196,33 +201,19 @@ class MainController extends Controller
     }
 
     //---Upload PDF ----//
-
-      function indexdata(Request $request){
+    function indexdata(Request $request)
+    {
         $client = ClientBuilder::create()->setHosts(['localhost:9200'])->build();
-    //     $fileName = $request->input('file');
-
-    //      //Retrieve pdf filename and upload file to folder PDF
-    //     $userFolder = "/Users/divyasreeramagiri/Downloads/PDF";
-    //     $userFolder = $userFolder . basename( $_FILES['file']['name']) ;
-    //     if(move_uploaded_file($_FILES['file']['tmp_name'], $userFolder))
-    //     {
-    //     echo "The file ". basename( $_FILES['file']['name']). " is uploaded";
-    //     }
-    //     else {
-    //     echo "Problem uploading file";
-    //     }
-    //    $fileName = $_FILES['.$file.']['name'];
-        
-            $title = $request->input("title");
-            $author = $request->input('author');
-            $university = $request->input('university');
-            $program = $request->input('program');
-            $degree = $request->input('degree');
-            $year = $request->input('year');
-            $abstract = $request->input('abstract');
+        $title = $request->input("title");
+        $author = $request->input('author');
+        $university = $request->input('university');
+        $program = $request->input('program');
+        $degree = $request->input('degree');
+        $year = $request->input('year');
+        $abstract = $request->input('abstract');
     
             $searchParams = [
-                'index' => 'web518',
+                'index' => 'web1_518',
                 'type' => '_doc',
                 'body'  => [
                     'etd_file_id' => rand(501,1000),
@@ -233,15 +224,51 @@ class MainController extends Controller
                     'degree' => $degree,
                     'year'=>$year,
                     'abstract'=>$abstract,
-                    //'pdf'=>$fileName
                 ]
             ];
-            $response = $client->index($searchParams);
-            echo '<p style="color:white; text-align:center; font-size: 20px; background-color:green; padding: 5px 0px 5px 0px">Indexing Successful!</p>';
-            return view('index');
-          }
+        $response = $client->index($searchParams);
+        echo '<p style="color:white; text-align:center; font-size: 20px; background-color:green; padding: 5px 0px 5px 0px">Indexing Successful!</p>';
+        return view('index');
+    }
+
+    //---- To set New Password ---//
+    public function setnewpassword($email)
+    {
+        $user=User::where(['email' => $email])->first();
+        return view('setnewpassword',['user' => $user]);
+    }
+    
+    public function set_password(Request $request)
+    {   
+        $request->validate([
+        'new_password' => 'required|min:6|alphaNum|required_with:confirm_password',
+        'confirm_password' => 'required|min:6|same:new_password'
+        ]);
+
+        $userInfo=User::find($request->id);
+        $userInfo->password=Hash::make($request->input('new_password'));
+        $userInfo->save();
+        return redirect()->back()->with('message',"You have changed your password successfully!");
+    }
 
 
+    public function forgot_password(Request $request)
+    {     
+        if (DB::table('users')->where('email', $request->email)->exists()) 
+        {
+            $userInfo = Auth::user();
+            $userInfo = DB::table('users')->where('email', $request->email)->first();
+
+        }
+        if($userInfo != null)
+        {
+            MailController::sendForgotPassword($userInfo->name,$userInfo->email,$userInfo->verification_code);
+            return redirect()->back()->with('message','Please check your email to set a New Password');
+        }
+        else{
+            return redirect()->back()->with('error_message','Please enter a valid email');
+        }
+    }
 
     //----TO generate TOKEN ----//      
     public function getTokenapi()
@@ -259,24 +286,25 @@ class MainController extends Controller
         }
     }
 
+
     //----- API SEARCH -----//
     public function getApi()
     {
-        $terms = request('query');
-        $limit = request('n');
+        $searchTerm = request('query');
+        $n = request('n');
         $key = request('key');
         $client = ClientBuilder::create()->build();
 
-        $resultids = (array)DB::select('select remember_token from users');
-        $resultstr = json_encode($resultids);
-        if (str_contains($resultstr, $key)) {
+        $result = (array)DB::select('select remember_token from users');
+        $resultString = json_encode($result);
+        if (str_contains($resultString, $key)) {
 
             $params = [
-                'index' => 'web518',
+                'index' => 'web1_518',
                 'body' => [
                     'query' => [
                         'multi_match' => [
-                            'query' => $terms,
+                            'query' => $searchTerm,
                             'fields' => [
                                 'abstract',
                                 'wiki_terms',                                    
@@ -290,36 +318,35 @@ class MainController extends Controller
                             ],
                         ],
                     ],
-                    'size'=>$limit,
+                    'size'=>$n,
                 ],
             ];
 
-            $results = $client->search($params);
-            $searchHits = $results['hits']['total']['value'];
-            $searchResult = $results['hits']['hits'];
+        $results = $client->search($params);
+        $searchHits = $results['hits']['total']['value'];
+        $searchResult = $results['hits']['hits'];
     
-            $rank = 1;
+        $rank = 1;
 
-                for($i=0; $i<=$rank; $i++)
-                {       
-                if($rank<=$limit)
-                {
-                    $title[$rank]['title'] = $results['hits']['hits'][$rank-1]['_source']['title'];
-                    $author[$rank]['author'] = $results['hits']['hits'][$rank-1]['_source']['author'];
-                    $etd[$rank]['etd_file_id'] = $results['hits']['hits'][$rank-1]['_source']['etd_file_id'];
-                    $year[$rank]['year'] = $results['hits']['hits'][$rank-1]['_source']['year'];
-                    $university[$rank]['university'] = $results['hits']['hits'][$rank-1]['_source']['university'];                        
-                    $degree[$rank]['degree'] = $results['hits']['hits'][$rank-1]['_source']['degree'];
-                    //$abstract[$rank]['abstract'] = $results['hits']['hits'][$rank-1]['_source']['abstract'];
-                    //$adviso[$rank]['advisor'] = $results['hits']['hits'][$rank-1]['_source']['advisor'];
-                    $program[$rank]['program'] = $results['hits']['hits'][$rank-1]['_source']['program'];
-                    $rank+=1;
-                }
-                }
-                return response()->json(['response'=>$title,$author,$university,$degree,$program], 200);
-            }else {
-                return response()->json(['error' => 'UnAuthorised Access'], 401);
+        for($i=0; $i<=$rank; $i++)
+        {     
+
+            if($rank<=$n)
+            {
+                $title[$rank]['title'] = $results['hits']['hits'][$rank-1]['_source']['title'];
+                $author[$rank]['author'] = $results['hits']['hits'][$rank-1]['_source']['author'];
+                $etd[$rank]['etd_file_id'] = $results['hits']['hits'][$rank-1]['_source']['etd_file_id'];
+                $year[$rank]['year'] = $results['hits']['hits'][$rank-1]['_source']['year'];
+                $university[$rank]['university'] = $results['hits']['hits'][$rank-1]['_source']['university'];                        
+                $degree[$rank]['degree'] = $results['hits']['hits'][$rank-1]['_source']['degree'];
+                $program[$rank]['program'] = $results['hits']['hits'][$rank-1]['_source']['program'];
+                $rank+=1;
             }
+        }
+        return response()->json(['response'=>$title,$author,$university,$degree,$program], 200);
+        }else {
+            return response()->json(['error' => 'UnAuthorised Access'], 401);
+        }
     }
         
 }

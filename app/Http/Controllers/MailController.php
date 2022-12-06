@@ -22,5 +22,15 @@ class MailController extends Controller
         return $data['verification_code'];
     }
 
+    public static function sendForgotPassword($name,$email,$verification_code)
+    {
+        $data =[
+            'name'=>$name,
+            'email'=>$email,
+            'verification_code'=>$verification_code
+        ];
+         Mail::to($email)->send(new ForgotPassword($data));
+    }
+
     
 }

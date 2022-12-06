@@ -82,7 +82,7 @@
     $client = Elastic\Elasticsearch\ClientBuilder::create()->build();
     $searchWord = strip_tags(htmlspecialchars_decode($searchString)); 
     $params = [
-        'index' => 'web518',
+        'index' => 'web1_518',
         'body' => [
             'query' => [
                 'multi_match' => [

@@ -23,9 +23,9 @@
 
 <body class="bg-gradient-to-r from-teal-200 to-lime-200">
     </br>
-<a href="{{ url( '/') }}" class="ml-2 mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
+    <a href="{{ url( '/') }}" class="ml-2 mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
     < Back
-</a>
+    </a>
     <div class="loginCard p-4 mx-auto max-w-lg bg-blue-200 rounded-lg border border-gray-200 shadow-md">
 <!--To display error messages-->
     @if ($message = Session::get('error'))
@@ -35,7 +35,7 @@
    @endif
 
    @if ($message = Session::get('message'))
-   <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+   <div class="p-4 mb-4 text-sm text-green-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
     <strong>{{ $message }}</strong>
     </div>
    @endif
@@ -60,7 +60,7 @@
            <div class="mb-6">
                <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Password</label>
                <input type="password" id="password" name="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-blue-50" required="">
-               <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400 flex justify-end"><a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Forgot Password?</a></p>
+               <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400 flex justify-end"><a href="/forgotpassword" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Forgot Password?</a></p>
            </div>
            <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
            <br/>

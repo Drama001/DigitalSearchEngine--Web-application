@@ -39,6 +39,7 @@ Route::get('/search', function (){
     return view('search');
 });
 
+
 Route::get('/verificationpage', 'App\Http\Controllers\MainController@verificationpage');
 
 Route::get('/verifyuser','App\Http\Controllers\MainController@verifyuser');
@@ -60,8 +61,12 @@ Route::get('/uploadETD', function (){
 
 Route::post('/indexdata', 'App\Http\Controllers\MainController@indexdata');
 
+Route::get('/setnewpassword/{email}', 'App\Http\Controllers\MainController@setnewpassword');
 
+Route::post('/main/set_password', 'App\Http\Controllers\MainController@set_password');
 
+Route::get('/forgotpassword', function () {
+    return view('forgotpassword');
+});
 
-
-
+Route::post('/main/forgot_password','App\Http\Controllers\MainController@forgot_password');

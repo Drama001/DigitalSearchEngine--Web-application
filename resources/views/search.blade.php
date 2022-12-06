@@ -102,7 +102,7 @@
     $searchWord = strip_tags(htmlspecialchars_decode($searchString)); 
  // $searchWord = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $search_string);
   $params = [
-    'index' => 'web518',
+    'index' => 'web1_518',
     'body' => [
         'query' => [
             'multi_match' => [

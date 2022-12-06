@@ -14,10 +14,10 @@
 </head>
 <body class="bg-gradient-to-r from-teal-200 to-lime-200">
   <div class="w-screen h-screen flex justify-center items-center flex-col">
-  <h1 class="text-3xl font-bold ">DIGITAL SEARCH ENGINE</h1>
+  <h1 class="text-xl md:text-3xl lg:text-4xl font-bold ">DIGITAL SEARCH ENGINE</h1>
   <div>
-  <button type="button" class="p-2.5 ml-2 px-4 text-sm font-medium text-white bg-gray-700 rounded-md border border-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300"><a href="{{url('/login') }}">Login</a></button>
-  <button type="button" class="p-2.5 ml-2 text-sm font-medium text-white bg-gray-700 rounded-md border border-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300"><a href="{{url('/register') }}">Register</a></button>
+  <button type="button" class="p-2.5 ml-2 px-4 text-xs md:text-sm lg:text-md font-medium text-white bg-gray-700 rounded-md border border-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300"><a href="{{url('/login') }}">Login</a></button>
+  <button type="button" class="p-2.5 ml-2 text-xs md:text-sm lg:text-md font-medium text-white bg-gray-700 rounded-md border border-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300"><a href="{{url('/register') }}">Register</a></button>
 </div>
   <div class="searchBox container mx-auto w-1/2 mt-8">  
             <form class="flex items-center" action="{{ url('/viewSearch') }}" method="GET">   
@@ -28,7 +28,7 @@
                     </div>
                     <input type="text" id="simple-search" name="search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Type Here.." required="">
                 </div>
-                <button type="submit" name="sh" class="p-2.5 ml-2 text-sm font-medium text-white bg-gray-700 rounded-md border border-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300">
+                <button type="submit" name="sh" class="p-2.5 ml-2 text-xs md:text-sm lg:text-md font-medium text-white bg-gray-700 rounded-md border border-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300">
                     <p>Search</p>
                 </button>
             </form>
