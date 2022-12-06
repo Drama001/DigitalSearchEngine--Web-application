@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Search Engine</title>
+    <!--- Website LOGO --->
+    <link rel="icon" href="logos/logo.png" type="x-icon">
+    <!--Tailwind css-->
     <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
     <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
     <style>
@@ -19,7 +23,7 @@
 <div class="navBar">
         <nav class="px-2 bg-white border-gray-200">
         <div class="container flex flex-wrap justify-between items-center mx-auto ">
-            <a href="{{url('/welcome')}}" class="flex items-center">
+            <a href="{{url('/')}}" class="flex items-center">
                 <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Digital Search Engine</span>
             </a>
             <button data-collapse-toggle="mobile-menu" type="button" class="inline-flex justify-center items-center ml-3 text-gray-400 rounded-lg md:hidden hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-gray-400 dark:hover:text-white dark:focus:ring-gray-500" aria-controls="mobile-menu-2" aria-expanded="false">
@@ -53,7 +57,7 @@
                 </button>
             </form>
     </div>
-</body>
+
 
 <?php
     //----PAGINATION------//
@@ -77,36 +81,42 @@
     require '/Users/divyasreeramagiri/webProject_001/vendor/autoload.php';
     $client = Elastic\Elasticsearch\ClientBuilder::create()->build();
     $searchWord = strip_tags(htmlspecialchars_decode($searchString)); 
-  $params = [
-    'index' => 'web518',
-    'body' => [
-        'query' => [
-            'multi_match' => [
-                'query' => $searchWord,
-                'fields' => [
-                    'abstract',
-                    'wiki_terms',
-                    'title',
-                    'advisor',
-                    '$year',
-                    'degree',
-                    'program',
-                    'university',
-                    'author'
+    $params = [
+        'index' => 'web518',
+        'body' => [
+            'query' => [
+                'multi_match' => [
+                    'query' => $searchWord,
+                    'fields' => [
+                        'abstract',
+                        'wiki_terms',
+                        'title',
+                        'advisor',
+                        '$year',
+                        'degree',
+                        'program',
+                        'university',
+                        'author'
+                    ],
+                    
                 ],
             ],
+            'size'=>500,
         ],
-        'size'=>500,
-    ],
-];
+    ];
 
   $response = $client->search($params);
   $searchHits = $response['hits']['total']['value'];
   $searchResult = $response['hits']['hits'];
   
   if ($searchHits == 0){
-    echo'<div style="text-align:center;" class="alert alert-danger success-block">';
-     echo '<p class="head">No Results Found..!</p>';
+  
+     echo '<div class="text-white text-xl py-5 flex items-center justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+    </svg>
+     No Results Found
+     </div>';
     
   }
   else{
@@ -134,10 +144,10 @@
     echo'
     <div class=" py-2 px-5">
     <a href="/dissertationView/'.$etd_file_id.'" class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100">    
-        <p class="mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">Title:</span>'.$title.'</p> 
-        <p class="mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">Author(s):</span>'.$author.'</p>
-        <p class="mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">University:</span>'.$university.'</p>
-        <p class="mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">Year:</span>'.$year.'</p>
+        <p class="mb-2 text-md tracking-tight text-gray-900 capitalize"><span class="font-bold px-2">Title:</span>'.$title.'</p> 
+        <p class="mb-2 text-md tracking-tight text-gray-900 capitalize"><span class="font-bold px-2">Author(s):</span>'.$author.'</p>
+        <p class="mb-2 text-md tracking-tight text-gray-900 capitalize"><span class="font-bold px-2">University:</span>'.$university.'</p>
+        <p class="mb-2 text-md tracking-tight text-gray-900 capitalize"><span class="font-bold px-2">Year:</span>'.$year.'</p>
         <p class="font-normal text-gray-700 px-2"><span class="font-bold ">Abstract:</span>'.$trimmed_abstract.'</p>
     </a> 
     </div>
@@ -178,6 +188,11 @@
 }
 
 ?>
+</body>
+
+<footer>
+    @include('footer')
+</footer>
 
 </html>
 

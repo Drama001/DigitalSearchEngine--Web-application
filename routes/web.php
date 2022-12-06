@@ -17,7 +17,7 @@ use Elastic\Elasticsearch;
 
 
 
-Route::get('/welcome', function () {
+Route::get('/', function () {
     return view('welcome');
 });
 
@@ -34,6 +34,10 @@ Route::get('/register', function (){
 Route::get('/home', function (){
     return view('index');
 })->name('home');
+
+Route::get('/search', function (){
+    return view('search');
+});
 
 Route::get('/verificationpage', 'App\Http\Controllers\MainController@verificationpage');
 

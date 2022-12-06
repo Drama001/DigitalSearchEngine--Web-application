@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Search Engine</title>
+    <!--- Website LOGO --->
+    <link rel="icon" href="logos/logo.png" type="x-icon">
+    <!--Tailwind css-->
     <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
     <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
     <style>
@@ -13,6 +17,9 @@
         body{
             background-color: rgb(7 89 133);
         }
+        footer{
+            margin-top : 20px;
+        }
         </style>
 </head>
 <body >
@@ -20,7 +27,7 @@
         <nav class="px-2 bg-white border-gray-200">
         <div class="container flex flex-wrap justify-between items-center mx-auto ">
             <a href="#" class="flex items-center">
-                <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Dashboard</span>
+                <span class="self-center text-xl font-semibold whitespace-nowrap">Search Results</span>
             </a>
             <button data-collapse-toggle="mobile-menu" type="button" class="inline-flex justify-center items-center ml-3 text-gray-400 rounded-lg md:hidden hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-gray-400 dark:hover:text-white dark:focus:ring-gray-500" aria-controls="mobile-menu-2" aria-expanded="false">
             <span class="sr-only">Open main menu</span>
@@ -29,7 +36,10 @@
             <div class="hidden w-full md:block md:w-auto" id="mobile-menu">
             <ul class="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                 <li>
-                <a href="{{ url( '/home') }}" class="block py-2 pr-4 pl-3 text-base text-gray rounded md:bg-transparent md:p-0 " aria-current="page">Home</a>
+                <a href="{{ url( '/home') }}" class="block py-2 pr-4 pl-3 text-base text-gray rounded md:bg-transparent md:p-0 " aria-current="page">Dashboard</a>
+                </li>
+                <li>
+                <a href="{{ url( '/uploadETD') }}" class="block py-2 pr-4 pl-3 text-base text-gray rounded md:bg-transparent md:p-0 " aria-current="page">Upload Document</a>
                 </li>
                 <li>
                     <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" class="flex justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg> <svg class="ml-1 w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
@@ -44,7 +54,7 @@
                         </li>
                         </ul>
                         <div class="py-1">
-                        <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">Sign out</a>
+                        <a href="/logout" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">Sign out</a>
                         </div>
                     </div>
                 </li>
@@ -121,8 +131,12 @@
   $searchResult = $response['hits']['hits'];
   
   if ($searchHits == 0){
-    echo'<div style="text-align:center;" class="alert alert-danger success-block">';
-     echo '<p class="head">No Results Found..!</p>';
+    echo'<div class="text-white text-xl py-5 flex items-center justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+    </svg>
+     No Results Found
+     </div>';
     
   }
   else{
@@ -149,10 +163,10 @@
     echo'
     <div class=" py-2 px-5">
     <a href="/dissertationView/'.$etd_file_id.'" class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100">    
-    <p class="mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">Title:</span>'.$title.'</p>
-    <p class="mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">Author(s):</span>'.$author.'</p>
-    <p class="mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">University:</span>'.$university.'</p>
-    <p class="mb-2 text-md tracking-tight text-gray-900"><span class="font-bold px-2">Year:</span>'.$year.'</p>
+    <p class="mb-2 text-md tracking-tight text-gray-900 capitalize"><span class="font-bold px-2">Title:</span>'.$title.'</p>
+    <p class="mb-2 text-md tracking-tight text-gray-900 capitalize"><span class="font-bold px-2">Author(s):</span>'.$author.'</p>
+    <p class="mb-2 text-md tracking-tight text-gray-900 capitalize"><span class="font-bold px-2">University:</span>'.$university.'</p>
+    <p class="mb-2 text-md tracking-tight text-gray-900 capitalize"><span class="font-bold px-2">Year:</span>'.$year.'</p>
     <p class="font-normal text-gray-700 px-2"><span class="font-bold ">Abstract:</span>'.$trimmed_abstract.'</p>
     </a> 
     </div>
@@ -189,7 +203,9 @@
 }
 
 ?>
-
+<footer>
+    @include('footer')
+</footer>
 
 </html>
 

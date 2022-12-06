@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/key', 'App\Http\Controllers\MainController@getTokenapi');
+
+Route::get('/search','App\Http\Controllers\MainController@getApi');
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
